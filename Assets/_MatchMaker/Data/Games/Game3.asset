@@ -15,8 +15,8 @@ MonoBehaviour:
   spriteMatrix:
   - {fileID: 21300000, guid: 7b00bbb4e5c8da849a2c2e7dc85e9a61, type: 3}
   - {fileID: 0}
-  - {fileID: 21300000, guid: 5446a1c63fce09f44b4fc168a42e208c, type: 3}
-  - {fileID: 21300000, guid: 0b867a8b398436f4688089bb53644d4f, type: 3}
+  - {fileID: 21300000, guid: 5854871174256f748b41d666e803669d, type: 3}
+  - {fileID: 21300000, guid: b38ad15961f25e142bf8537d59b27654, type: 3}
   - {fileID: 21300000, guid: 5446a1c63fce09f44b4fc168a42e208c, type: 3}
   - {fileID: 21300000, guid: b38ad15961f25e142bf8537d59b27654, type: 3}
   - {fileID: 0}

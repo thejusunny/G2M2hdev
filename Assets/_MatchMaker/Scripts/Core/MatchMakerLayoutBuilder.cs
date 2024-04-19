@@ -1,4 +1,6 @@
 using Assets._MatchMaker.Scripts.Data;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using UnityEditor;
 using UnityEngine;
@@ -11,12 +13,21 @@ public class MatchMakerLayoutBuilder : MonoBehaviour
     [SerializeField] private Card _card;
     [SerializeField]private Vector2 _startOffset;
     [SerializeField]private Vector2 _extraPadding;
+    List<Vector2> _placementPositions = new List<Vector2>();
+    /// <summary>
+    /// Callback when build is completed and returns the cards that were built
+    /// </summary>
+    public event Action<List<Card>> BuildCompleted;
     
     private Vector2 _gridSize;
-   
-    
+
+    private void Start()
+    {
+        Invoke(nameof(BuildLayout),1f);
+    }
     public void BuildLayout()
     {
+        _placementPositions.Clear();
         _gridSize = _matchMakerData._dimensions;
         float width = _panel.sizeDelta.x *0.8f; //20% for padding
         float height = _panel.sizeDelta.y * 0.8f;
@@ -33,6 +44,7 @@ public class MatchMakerLayoutBuilder : MonoBehaviour
         {
             cellSize.y = cellSize.x;
         }
+        List<Card> cards = new List<Card>();
         float paddingX = 0f;
         float paddingY = 0f;
         Vector2 pos = Vector2.zero;
@@ -45,16 +57,20 @@ public class MatchMakerLayoutBuilder : MonoBehaviour
             {
                 paddingX += cellPadding.x;
                 pos.x = startPosition.x + (cellSize.x * x)+ paddingX;
-                Sprite sprite = _matchMakerData.spriteMatrix[y + (int)(_gridSize.x * x)];
-                //Place the card only if there are available sprite in the matrix else leave it empty
-                if(sprite != null)
-                {
-                    Card card = Instantiate(_card, _panel);
-                    card.Init(sprite, cellSize, pos);
-                }
+                _placementPositions.Add(pos);
             }
             paddingX = 0;
         }
+        for (int i = 0; i < _matchMakerData.spriteMatrix.Length; i++)
+        {
+            if (_matchMakerData.spriteMatrix[i] == null)
+                continue;
+            Card card = Instantiate(_card, _panel);
+            card.Init(_matchMakerData.spriteMatrix[i], cellSize, _placementPositions[i]);
+            cards.Add(card);
+        }
+        BuildCompleted?.Invoke(cards);
+        cards.Clear();
     }
     public void ClearLayout()
     {

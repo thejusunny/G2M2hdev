@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
+using static UnityEngine.UI.Button;
 
 public class Card : MonoBehaviour
 {
@@ -11,11 +14,19 @@ public class Card : MonoBehaviour
     [SerializeField]private AnimationCurve _flipInAnimationCurve;
     [SerializeField]private AnimationCurve _flipOutAnimationCurve;
     private Image _image;
+    private Button _button;
     private bool _flipped = false;
     private readonly Color TransparentColor = new Color(1, 1, 1, 0);
+    public Sprite FrontSprite=> _frontSprite;
+    public ButtonClickedEvent Clicked => _button.onClick;
+    public bool Flipped => _flipped;
+
+    public event Action FlipAnimationCompleted;
+    private Coroutine _animationRoutine;
     private void Awake()
     {
         _image = GetComponent<Image>();
+        _button = GetComponent<Button>();
     }
     public void Init(Sprite frontSprite, Vector2 size, Vector2 position)
     {
@@ -29,7 +40,12 @@ public class Card : MonoBehaviour
     [ContextMenu("Flip")]
     public void Flip()
     {
-        StartCoroutine(FlipAnimation());
+        if (_animationRoutine != null)
+        {
+            StopCoroutine(_animationRoutine);
+            _animationRoutine = null;
+        } 
+        _animationRoutine =  StartCoroutine(FlipAnimation());
     }
     private IEnumerator FlipAnimation()
     {
@@ -56,7 +72,7 @@ public class Card : MonoBehaviour
         {
             while (rotationY < 180f)
             {
-                rotationY = Mathf.Lerp(rotationY, 180,_flipInAnimationCurve.Evaluate(_flipInAnimationCurve.Evaluate(Time.time - startTime) / _flipDuration));
+                rotationY = Mathf.Lerp(rotationY, 180,_flipInAnimationCurve.Evaluate((Time.time - startTime) / _flipDuration));
                 currentRotation.y = rotationY;
                 transform.eulerAngles = currentRotation;
                 if (rotationY > 90f && _image.sprite != _frontSprite)
@@ -67,6 +83,7 @@ public class Card : MonoBehaviour
             }
             _flipped = true;
         }
+        FlipAnimationCompleted?.Invoke();
         
     }
 }
