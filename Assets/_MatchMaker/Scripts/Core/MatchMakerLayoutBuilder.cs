@@ -8,12 +8,12 @@ public class MatchMakerLayoutBuilder : MonoBehaviour
 {
     [SerializeField] private MatchMakerData _matchMakerData;
     [SerializeField] private RectTransform _panel;
-    [SerializeField] private Image _image;
+    [SerializeField] private Card _card;
     [SerializeField]private Vector2 _startOffset;
     [SerializeField]private Vector2 _extraPadding;
     
     private Vector2 _gridSize;
-    private readonly Color TransparentColor = new  Color(1, 1, 1, 0);
+   
     
     public void BuildLayout()
     {
@@ -40,22 +40,18 @@ public class MatchMakerLayoutBuilder : MonoBehaviour
         for (int y = 0; y < _gridSize.y; y++)
         {
             paddingY += cellPadding.y;
-            pos.y = startPosition.y  + (cellSize.x * -y)- paddingY ;
+            pos.y = startPosition.y  + (cellSize.x * -y)- paddingY;
             for (int x =0;x< _gridSize.x; x++)
             {
                 paddingX += cellPadding.x;
                 pos.x = startPosition.x + (cellSize.x * x)+ paddingX;
-                Image newImage = Instantiate(_image, _panel);
                 Sprite sprite = _matchMakerData.spriteMatrix[y + (int)(_gridSize.x * x)];
-                if (sprite == null)
+                //Place the card only if there are available sprite in the matrix else leave it empty
+                if(sprite != null)
                 {
-                    newImage.color = TransparentColor;
+                    Card card = Instantiate(_card, _panel);
+                    card.Init(sprite, cellSize, pos);
                 }
-                else
-                    newImage.sprite = sprite;
-                newImage.transform.localPosition = pos;
-                newImage.rectTransform.sizeDelta = cellSize;
-                newImage.gameObject.SetActive(true);
             }
             paddingX = 0;
         }
