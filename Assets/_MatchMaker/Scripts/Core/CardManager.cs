@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CardManager : MonoBehaviour
 {
-    [SerializeField]private MatchMakerLayoutBuilder layoutBuilder;
+    [SerializeField]private MatchMakerLayoutBuilder _layoutBuilder;
     private List<Card> _cards ;
     //private List<Card> _stagedCards = new List<Card>();
     private Queue<(Card, Card)> _stagedCards = new Queue<(Card, Card)> ();
@@ -15,7 +15,7 @@ public class CardManager : MonoBehaviour
     private int _flipCount;
     private void Start()
     {
-        layoutBuilder.BuildCompleted += Initialize;
+        _layoutBuilder.BuildCompleted += Initialize;
     }
     private void Initialize(List<Card> cards)
     {
@@ -55,6 +55,7 @@ public class CardManager : MonoBehaviour
                     {
                         Debug.Log("All Cards Flipped");
                         AllCardsFlipped?.Invoke();
+                        _layoutBuilder.ClearLayout();
                     }
                     Debug.Log("GoodFlip" + latestBatch.Item1.FrontSprite.name + "::" + latestBatch.Item2.FrontSprite.name);
                 }

@@ -14,4 +14,12 @@ public class UIScoreHUD : MonoBehaviour
         _streakText.text = streak.streakCount.ToString();
         _bestStreakText.text = streak.bestStreak.ToString();   
     }
+    public void Hide()
+    { 
+        gameObject.SetActive(false);
+    }
+    public void Show()
+    { 
+        gameObject.SetActive(true);
+    }
 }

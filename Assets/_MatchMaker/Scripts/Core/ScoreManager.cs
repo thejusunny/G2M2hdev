@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
-
 public class ScoreManager : MonoBehaviour
 {
     [SerializeField] private CardManager _cardManager;
     [SerializeField] private UIScoreHUD _ui;
+    [SerializeField] private ScoreData _scoreData;
     private StreakHandler _streakHandler;
     private ScoreHandler _scoreHandler;
+    public event Action<Score, Streak> ScoreFinalized;
 
     // Start is called before the first frame update
     void Start()
@@ -20,9 +21,19 @@ public class ScoreManager : MonoBehaviour
         _cardManager.FlipEvaluated += _scoreHandler.Count;
         _cardManager.FlipEvaluated += _streakHandler.Count;
         _cardManager.FlipEvaluated += UpdateUI;
+        _cardManager.AllCardsFlipped += ComputeFinalScore;
         _scoreHandler.Reset();
         _streakHandler.Reset();
+        _ui.Show();
         _ui.Refresh(_scoreHandler.Score, _streakHandler.Streak);
+    }
+    private void ComputeFinalScore()
+    { 
+        _scoreHandler.ComputeFinalScore();
+        _streakHandler.Reset();
+        _ui.Hide();
+        _scoreData.Save(_scoreHandler.Score, _streakHandler.Streak);
+        ScoreFinalized?.Invoke(_scoreHandler.Score, _streakHandler.Streak);
     }
     
     private void OnDestroy()
@@ -37,12 +48,15 @@ public class ScoreManager : MonoBehaviour
         _ui.Refresh(_scoreHandler.Score, _streakHandler.Streak);
     }
 }
+[Serializable]
 public struct Score
 {
     public int correct;
     public int turns;
+    public int wrong => turns - correct;
     public int totalPoints;
 }
+[Serializable]
 public struct Streak
 {
     public int streakCount;
@@ -52,19 +66,23 @@ public class ScoreHandler
 {
     private Score _score;
     public Score Score => _score;
+    const int MAXPOINTS = 500;
     public void Reset()
     {
-        _score.turns = _score.correct = 0;
+        _score.turns = _score.correct = _score.totalPoints = 0;
     }
     public void Count(bool success)
     {
-        if (success) _score.correct++;
+        if (success)
+        {
+          _score.correct++;
+        };
         _score.turns++;
     }
     public void ComputeFinalScore()
     {
-        //Any bonuses or extras can be added here
-        _score.totalPoints = _score.correct * 100;
+        _score.totalPoints = (int)(((float)_score.correct / _score.turns)* MAXPOINTS);
+        Debug.Log(_score.totalPoints);
     }
 }
 public class StreakHandler
@@ -77,10 +95,7 @@ public class StreakHandler
     public Streak Streak=> _streak;
     public void Reset() 
     {
-        if (_streak.streakCount > _streak.bestStreak)
-        {
-            _streak.bestStreak = _streak.streakCount;
-        }
+        CheckForBestStreak();
         _streak.streakCount = 0;
         _activated = false;
         Debug.Log("Reset Streak");
@@ -105,5 +120,12 @@ public class StreakHandler
             Adding?.Invoke();
         }
         Debug.Log(_streak.streakCount);
+    }
+    private void CheckForBestStreak()
+    {
+        if (_streak.streakCount > _streak.bestStreak)
+        {
+            _streak.bestStreak = _streak.streakCount;
+        }
     }
 }
