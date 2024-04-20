@@ -141,6 +141,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _flip: {fileID: 8300000, guid: fd50820911759e04c966c1a657248cf2, type: 3}
 --- !u!114 &1388599579490617302
 MonoBehaviour:
   m_ObjectHideFlags: 0

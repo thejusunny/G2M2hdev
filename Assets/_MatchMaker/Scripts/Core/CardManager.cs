@@ -6,6 +6,9 @@ using UnityEngine;
 public class CardManager : MonoBehaviour
 {
     [SerializeField]private MatchMakerLayoutBuilder _layoutBuilder;
+    [SerializeField] AudioClip _correctClip;
+    [SerializeField] AudioClip _wrongClip;
+    [SerializeField] AudioClip _completionClip;
     private List<Card> _cards ;
     //private List<Card> _stagedCards = new List<Card>();
     private Queue<(Card, Card)> _stagedCards = new Queue<(Card, Card)> ();
@@ -67,7 +70,9 @@ public class CardManager : MonoBehaviour
                         Debug.Log("All Cards Flipped");
                         AllCardsFlipped?.Invoke();
                         _layoutBuilder.ClearLayout();
+                        AudioManager.Instance.PlayClip(_completionClip, AudioManager.AudioType.SFX, false, 0.5f);
                     }
+                    AudioManager.Instance.PlayClip(_correctClip, AudioManager.AudioType.SFX, false, 0.5f);
                     Debug.Log("GoodFlip" + latestBatch.Item1.FrontSprite.name + "::" + latestBatch.Item2.FrontSprite.name);
                 }
                 else
@@ -75,6 +80,7 @@ public class CardManager : MonoBehaviour
                     latestBatch.Item1.Flip();
                     latestBatch.Item2.Flip();
                     FlipEvaluated?.Invoke(false);
+                    AudioManager.Instance.PlayClip(_wrongClip, AudioManager.AudioType.SFX, false, 0.5f);
                     Debug.Log("Wrong flip::"+latestBatch.Item1.FrontSprite.name +"::"+ latestBatch.Item2.FrontSprite.name);
                 }
                 latestBatch.Item1.FlipAnimationCompleted -= Evaluate;

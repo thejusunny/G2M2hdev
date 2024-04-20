@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 
 public class SaveSystem : MonoBehaviour
@@ -8,6 +9,11 @@ public class SaveSystem : MonoBehaviour
     public SaveProfile LoadProfile()
     {
         return Load<SaveProfile>(_savefileName);
+    }
+    [ContextMenu("ResetSaveFile")]
+    public void ResetSaveFile()
+    {
+        SaveProfile(new SaveProfile());
     }
     public void SaveProfile(SaveProfile profile)
     {

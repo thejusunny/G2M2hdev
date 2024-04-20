@@ -22,10 +22,6 @@ public class MatchMakerLayoutBuilder : MonoBehaviour
     
     private Vector2 _gridSize;
 
-    private void Start()
-    {
-        
-    }
     public void BuildLayout(MatchMakerData _data)
     {
         _placementPositions.Clear();

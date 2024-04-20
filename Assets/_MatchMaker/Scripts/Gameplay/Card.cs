@@ -13,6 +13,7 @@ public class Card : MonoBehaviour
     [SerializeField]private float _flipDuration =0.5f;
     [SerializeField]private AnimationCurve _flipInAnimationCurve;
     [SerializeField]private AnimationCurve _flipOutAnimationCurve;
+    [SerializeField]private AudioClip _flip;
     private Image _image;
     private Button _button;
     private bool _flipped = false;
@@ -44,7 +45,8 @@ public class Card : MonoBehaviour
         {
             StopCoroutine(_animationRoutine);
             _animationRoutine = null;
-        } 
+        }
+        AudioManager.Instance.PlayClip(_flip, AudioManager.AudioType.SFX, false, 0.25f);
         _animationRoutine =  StartCoroutine(FlipAnimation());
     }
     private IEnumerator FlipAnimation()
