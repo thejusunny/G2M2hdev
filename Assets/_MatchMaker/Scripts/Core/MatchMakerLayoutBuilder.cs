@@ -80,12 +80,13 @@ public class MatchMakerLayoutBuilder : MonoBehaviour
             Transform child = _panel.GetChild(i);
             if(child.gameObject.activeSelf)
             {
-                if (EditorApplication.isPlaying)
+                if (Application.isPlaying)
                     Destroy(child.gameObject);
             }
         }
     }
 }
+#if UNITY_EDITOR
 [CustomEditor(typeof(MatchMakerLayoutBuilder))]
 public class MatchMakerLayoutEditor : Editor
 {
@@ -103,3 +104,4 @@ public class MatchMakerLayoutEditor : Editor
         }
     }
 }
+#endif
