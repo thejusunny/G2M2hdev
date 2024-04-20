@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Game1
   m_EditorClassIdentifier: 
   spriteMatrix:
+  - {fileID: 21300000, guid: be046e917e71b3d4bbf1ce47bc17bbc2, type: 3}
+  - {fileID: 21300000, guid: 188807eb3295a0a4ea4b09c670af6a1c, type: 3}
   - {fileID: 21300000, guid: 13ad3e1b3b7e27b4188ac90c66307669, type: 3}
-  - {fileID: 21300000, guid: 53df5b66aa62bff4ca625e1095cf124f, type: 3}
-  - {fileID: 21300000, guid: 7b00bbb4e5c8da849a2c2e7dc85e9a61, type: 3}
-  - {fileID: 21300000, guid: 2b8a529a5365e8d4b967ae60dc5322e3, type: 3}
+  - {fileID: 21300000, guid: 31a7b29827d73a5438651c9ef70bdf02, type: 3}
   - {fileID: 21300000, guid: 13ad3e1b3b7e27b4188ac90c66307669, type: 3}
-  - {fileID: 21300000, guid: 53df5b66aa62bff4ca625e1095cf124f, type: 3}
-  - {fileID: 21300000, guid: 7b00bbb4e5c8da849a2c2e7dc85e9a61, type: 3}
-  - {fileID: 21300000, guid: 2b8a529a5365e8d4b967ae60dc5322e3, type: 3}
+  - {fileID: 21300000, guid: 31a7b29827d73a5438651c9ef70bdf02, type: 3}
+  - {fileID: 21300000, guid: 188807eb3295a0a4ea4b09c670af6a1c, type: 3}
+  - {fileID: 21300000, guid: be046e917e71b3d4bbf1ce47bc17bbc2, type: 3}
   _dimensions: {x: 4, y: 2}

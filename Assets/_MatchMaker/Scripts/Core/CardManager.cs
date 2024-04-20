@@ -5,15 +5,15 @@ using UnityEngine;
 
 public class CardManager : MonoBehaviour
 {
-    [SerializeField]private MatchMakerLayoutBuilder _layoutBuilder;
+    [SerializeField] private MatchMakerLayoutBuilder _layoutBuilder;
     [SerializeField] AudioClip _correctClip;
     [SerializeField] AudioClip _wrongClip;
     [SerializeField] AudioClip _completionClip;
     [SerializeField] private float _revealDuration = 1.5f;
-    private List<Card> _cards ;
+    private List<Card> _cards;
     //private List<Card> _stagedCards = new List<Card>();
-    private Queue<(Card, Card)> _stagedCards = new Queue<(Card, Card)> ();
-    private List<Card> _tempCards = new List<Card> ();
+    private List<(Card, Card)> _stagedCards = new List<(Card, Card)>();
+    private List<Card> _tempCards = new List<Card>();
     public event Action<bool> FlipEvaluated;
     public event Action AllCardsFlipped;
     private int _flipCount;
@@ -33,14 +33,14 @@ public class CardManager : MonoBehaviour
     private void Reset()
     {
         _flipCount = 0;
-        _stagedCards.Clear ();
-        _tempCards.Clear ();
+        _stagedCards.Clear();
+        _tempCards.Clear();
     }
     private void Initialize(List<Card> cards)
     {
-        _cards = new List<Card> (cards);
-        _tempCards.Clear ();
-        _stagedCards.Clear ();
+        _cards = new List<Card>(cards);
+        _tempCards.Clear();
+        _stagedCards.Clear();
         foreach (Card card in _cards)
         {
             card.Clicked.AddListener(() =>
@@ -50,7 +50,7 @@ public class CardManager : MonoBehaviour
         }
     }
     public void QuickReveal()
-    { 
+    {
         StartCoroutine(ShowAndHide());
     }
     private IEnumerator ShowAndHide()
@@ -70,8 +70,8 @@ public class CardManager : MonoBehaviour
         _tempCards.Add(card);
         if (_tempCards.Count >= 2)
         {
-            Debug.Log(_tempCards[0].FrontSprite.name +"::" + _tempCards[^1].FrontSprite.name);
-            _stagedCards.Enqueue((_tempCards[0], _tempCards[^1]));
+            //Debug.Log(_tempCards[0].FrontSprite.name + "::" + _tempCards[^1].FrontSprite.name);
+            _stagedCards.Add((_tempCards[0], _tempCards[^1]));
             _tempCards.Clear();
         }
         card.FlipAnimationCompleted += Evaluate;
@@ -87,25 +87,24 @@ public class CardManager : MonoBehaviour
     }
     private void Evaluate()
     {
-        Debug.Log("Eval");
-        if (_stagedCards.Count>0)
+        for (int i = _stagedCards.Count - 1; i >= 0; i--)
         {
-            var latestBatch = _stagedCards.Peek();
+            var latestBatch = _stagedCards[i];
             if (latestBatch.Item1.Flipped && latestBatch.Item2.Flipped)
             {
                 if (latestBatch.Item1.FrontSprite == latestBatch.Item2.FrontSprite)
                 {
-                    _flipCount +=2;
+                    _flipCount += 2;
                     FlipEvaluated?.Invoke(true);
                     if (_flipCount >= _cards.Count)
                     {
-                        Debug.Log("All Cards Flipped");
+                        //Debug.Log("All Cards Flipped");
                         AllCardsFlipped?.Invoke();
                         _layoutBuilder.ClearLayout();
                         AudioManager.Instance.PlayClip(_completionClip, AudioManager.AudioType.SFX, false, 0.5f);
                     }
                     AudioManager.Instance.PlayClip(_correctClip, AudioManager.AudioType.SFX, false, 0.5f);
-                    Debug.Log("GoodFlip" + latestBatch.Item1.FrontSprite.name + "::" + latestBatch.Item2.FrontSprite.name);
+                    //Debug.Log("GoodFlip" + latestBatch.Item1.FrontSprite.name + "::" + latestBatch.Item2.FrontSprite.name);
                 }
                 else
                 {
@@ -113,12 +112,13 @@ public class CardManager : MonoBehaviour
                     latestBatch.Item2.Flip();
                     FlipEvaluated?.Invoke(false);
                     AudioManager.Instance.PlayClip(_wrongClip, AudioManager.AudioType.SFX, false, 0.5f);
-                    Debug.Log("Wrong flip::"+latestBatch.Item1.FrontSprite.name +"::"+ latestBatch.Item2.FrontSprite.name);
+                    //Debug.Log("Wrong flip::" + latestBatch.Item1.FrontSprite.name + "::" + latestBatch.Item2.FrontSprite.name);
                 }
                 latestBatch.Item1.FlipAnimationCompleted -= Evaluate;
                 latestBatch.Item2.FlipAnimationCompleted -= Evaluate;
-                _stagedCards.Dequeue();
+                _stagedCards.RemoveAt(i);
             }
         }
+
     }
 }
