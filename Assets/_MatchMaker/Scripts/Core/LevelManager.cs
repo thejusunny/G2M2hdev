@@ -41,6 +41,11 @@ public class LevelManager : MonoBehaviour
     }
     private void ShowLevelEnd(Score score, Streak streak)
     {
+        if(_currentGame >= _matchMakerData.Count-1)
+        {
+            _uiLevelEnd.Show(score, streak, GetCurrentLayout().name, false);
+        }
+        else
         _uiLevelEnd.Show(score, streak, GetCurrentLayout().name);
     }
     private void SaveLevelProgress(Score score, Streak streak)
@@ -67,5 +72,12 @@ public class LevelManager : MonoBehaviour
         _layoutBuilder.BuildLayout(_matchMakerData[_currentGame]);
         _uiLevelEnd.Hide();
         LoadedLevel?.Invoke();
+    }
+    public void ResetGame()
+    { 
+        _saveSystem.ResetSaveFile();
+        SaveProfile profile = _saveSystem.LoadProfile();
+        _currentGame = profile.lastPlayedLevelIndex;
+        Restart();
     }
 }

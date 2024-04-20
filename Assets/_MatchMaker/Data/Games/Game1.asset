@@ -13,12 +13,8 @@ MonoBehaviour:
   m_Name: Game1
   m_EditorClassIdentifier: 
   spriteMatrix:
-  - {fileID: 21300000, guid: be046e917e71b3d4bbf1ce47bc17bbc2, type: 3}
-  - {fileID: 21300000, guid: 188807eb3295a0a4ea4b09c670af6a1c, type: 3}
-  - {fileID: 21300000, guid: 13ad3e1b3b7e27b4188ac90c66307669, type: 3}
-  - {fileID: 21300000, guid: 31a7b29827d73a5438651c9ef70bdf02, type: 3}
-  - {fileID: 21300000, guid: 13ad3e1b3b7e27b4188ac90c66307669, type: 3}
-  - {fileID: 21300000, guid: 31a7b29827d73a5438651c9ef70bdf02, type: 3}
-  - {fileID: 21300000, guid: 188807eb3295a0a4ea4b09c670af6a1c, type: 3}
-  - {fileID: 21300000, guid: be046e917e71b3d4bbf1ce47bc17bbc2, type: 3}
-  _dimensions: {x: 4, y: 2}
+  - {fileID: 21300000, guid: fc1b478573f5cf04d88cb84b46ca1f6f, type: 3}
+  - {fileID: 21300000, guid: 5446a1c63fce09f44b4fc168a42e208c, type: 3}
+  - {fileID: 21300000, guid: 5446a1c63fce09f44b4fc168a42e208c, type: 3}
+  - {fileID: 21300000, guid: fc1b478573f5cf04d88cb84b46ca1f6f, type: 3}
+  _dimensions: {x: 2, y: 2}

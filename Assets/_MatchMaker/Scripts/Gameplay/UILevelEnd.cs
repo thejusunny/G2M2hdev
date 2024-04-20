@@ -10,7 +10,9 @@ public class UILevelEnd : MonoBehaviour
     [SerializeField]private TMP_Text _wrongText;
     [SerializeField]private TMP_Text _pointsText;
     [SerializeField]private TMP_Text _bestStreakText;
-    public void Show(Score score, Streak streak, string levelName)
+    [SerializeField] private GameObject _nextButton;
+    [SerializeField] private GameObject _resetButton;
+    public void Show(Score score, Streak streak, string levelName, bool showNext = true)
     {
         _root.SetActive(true);
         _levelName.text = levelName.ToUpper();
@@ -19,6 +21,16 @@ public class UILevelEnd : MonoBehaviour
         _wrongText.text = score.wrong.ToString();
         _pointsText.text = score.totalPoints.ToString();
         _bestStreakText.text = streak.bestStreak.ToString();
+        if (showNext)
+        {
+            _nextButton.SetActive(true);
+            _resetButton.SetActive(false);
+        }
+        else
+        {
+            _nextButton.SetActive(false);
+            _resetButton.SetActive(true);
+        }
     }
     public void Hide()
     { 
