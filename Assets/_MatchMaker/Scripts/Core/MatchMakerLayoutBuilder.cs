@@ -8,12 +8,13 @@ using UnityEngine.UI;
 
 public class MatchMakerLayoutBuilder : MonoBehaviour
 {
-    [SerializeField] private MatchMakerData _matchMakerData;
-    [SerializeField] private RectTransform _panel;
-    [SerializeField] private Card _card;
+    [SerializeField]private MatchMakerData _matchMakerData;
+    [SerializeField]private RectTransform _panel;
+    [SerializeField]private Card _card;
     [SerializeField]private Vector2 _startOffset;
     [SerializeField]private Vector2 _extraPadding;
     List<Vector2> _placementPositions = new List<Vector2>();
+    public MatchMakerData MatchMakerData => _matchMakerData;
     /// <summary>
     /// Callback when build is completed and returns the cards that were built
     /// </summary>
@@ -23,12 +24,13 @@ public class MatchMakerLayoutBuilder : MonoBehaviour
 
     private void Start()
     {
-        Invoke(nameof(BuildLayout),1f);
+        
     }
-    public void BuildLayout()
+    public void BuildLayout(MatchMakerData _data)
     {
         _placementPositions.Clear();
-        _gridSize = _matchMakerData._dimensions;
+        ClearLayout();
+        _gridSize = _data._dimensions;
         float width = _panel.sizeDelta.x *0.8f; //20% for padding
         float height = _panel.sizeDelta.y * 0.8f;
         Vector2 totalPadding = new Vector2(_panel.sizeDelta.x, _panel.sizeDelta.y)*0.2f;
@@ -61,12 +63,12 @@ public class MatchMakerLayoutBuilder : MonoBehaviour
             }
             paddingX = 0;
         }
-        for (int i = 0; i < _matchMakerData.spriteMatrix.Length; i++)
+        for (int i = 0; i < _data.spriteMatrix.Length; i++)
         {
-            if (_matchMakerData.spriteMatrix[i] == null)
+            if (_data.spriteMatrix[i] == null)
                 continue;
             Card card = Instantiate(_card, _panel);
-            card.Init(_matchMakerData.spriteMatrix[i], cellSize, _placementPositions[i]);
+            card.Init(_data.spriteMatrix[i], cellSize, _placementPositions[i]);
             cards.Add(card);
         }
         BuildCompleted?.Invoke(cards);
@@ -97,7 +99,7 @@ public class MatchMakerLayoutEditor : Editor
             {
                 var builder = target as MatchMakerLayoutBuilder;
                 builder.ClearLayout();
-                builder.BuildLayout();
+                builder.BuildLayout(builder.MatchMakerData);
             }
         }
     }

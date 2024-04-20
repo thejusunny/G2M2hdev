@@ -13,9 +13,20 @@ public class CardManager : MonoBehaviour
     public event Action<bool> FlipEvaluated;
     public event Action AllCardsFlipped;
     private int _flipCount;
-    private void Start()
+    private void Awake()
     {
         _layoutBuilder.BuildCompleted += Initialize;
+        LevelManager.LoadedNewLevel += Reset;
+    }
+    private void OnDestroy()
+    {
+        LevelManager.LoadedNewLevel -= Reset;
+    }
+    private void Reset()
+    {
+        _flipCount = 0;
+        _stagedCards.Clear ();
+        _tempCards.Clear ();
     }
     private void Initialize(List<Card> cards)
     {

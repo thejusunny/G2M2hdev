@@ -7,6 +7,14 @@ public class UIScoreHUD : MonoBehaviour
     [SerializeField] private TMP_Text _turnsText;
     [SerializeField] private TMP_Text _streakText;
     [SerializeField] private TMP_Text _bestStreakText;
+    private void Start()
+    {
+        LevelManager.LoadedNewLevel += Show;
+    }
+    private void OnDestroy()
+    {
+        LevelManager.LoadedNewLevel -= Show;
+    }
     public void Refresh(Score score, Streak streak)
     { 
         _correctText.text = score.correct.ToString();

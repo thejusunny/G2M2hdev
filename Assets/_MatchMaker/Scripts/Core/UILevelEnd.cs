@@ -20,4 +20,8 @@ public class UILevelEnd : MonoBehaviour
         _pointsText.text = score.totalPoints.ToString();
         _bestStreakText.text = streak.bestStreak.ToString();
     }
+    public void Hide()
+    { 
+        _root.SetActive(false); 
+    }
 }

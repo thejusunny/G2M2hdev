@@ -22,15 +22,13 @@ public class ScoreManager : MonoBehaviour
         _cardManager.FlipEvaluated += _streakHandler.Count;
         _cardManager.FlipEvaluated += UpdateUI;
         _cardManager.AllCardsFlipped += ComputeFinalScore;
-        _scoreHandler.Reset();
-        _streakHandler.Reset();
-        _ui.Show();
-        _ui.Refresh(_scoreHandler.Score, _streakHandler.Streak);
+        LevelManager.LoadedNewLevel += Reset;
+        Reset();
     }
     private void ComputeFinalScore()
     { 
         _scoreHandler.ComputeFinalScore();
-        _streakHandler.Reset();
+        _streakHandler.ResetStreak();
         _ui.Hide();
         _scoreData.Save(_scoreHandler.Score, _streakHandler.Streak);
         ScoreFinalized?.Invoke(_scoreHandler.Score, _streakHandler.Streak);
@@ -45,6 +43,13 @@ public class ScoreManager : MonoBehaviour
     //TODO: potential issue here, delegates order could break this, use a update manager instead
     private void UpdateUI(bool success)
     {
+        _ui.Refresh(_scoreHandler.Score, _streakHandler.Streak);
+    }
+    private void Reset()
+    {
+        _scoreHandler.Reset(); 
+        _streakHandler.Reset();
+        _ui.Show();
         _ui.Refresh(_scoreHandler.Score, _streakHandler.Streak);
     }
 }
@@ -93,17 +98,22 @@ public class StreakHandler
     private bool _activated;
     private Streak _streak;
     public Streak Streak=> _streak;
-    public void Reset() 
+    public void ResetStreak() 
     {
         CheckForBestStreak();
         _streak.streakCount = 0;
         _activated = false;
         Debug.Log("Reset Streak");
     }
+    public void Reset()
+    {
+        _streak.streakCount = _streak.bestStreak = 0;
+        _activated = false;
+    }
     public void Count(bool success) {
         if (!success)
         { 
-            Reset();
+            ResetStreak();
             return;
         }
         _streak.streakCount++;
