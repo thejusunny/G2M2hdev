@@ -10,6 +10,7 @@ public class CardManager : MonoBehaviour
     //private List<Card> _stagedCards = new List<Card>();
     private Queue<(Card, Card)> _stagedCards = new Queue<(Card, Card)> ();
     private List<Card> _tempCards = new List<Card> ();
+    public event Action<bool> FlipEvaluated;
     private void Start()
     {
         layoutBuilder.BuildCompleted += Initialize;
@@ -46,13 +47,15 @@ public class CardManager : MonoBehaviour
             {
                 if (latestBatch.Item1.FrontSprite == latestBatch.Item2.FrontSprite)
                 {
-                   
+
+                    FlipEvaluated?.Invoke(true);
                     Debug.Log("GoodFlip" + latestBatch.Item1.FrontSprite.name + "::" + latestBatch.Item2.FrontSprite.name);
                 }
                 else
                 {
                     latestBatch.Item1.Flip();
                     latestBatch.Item2.Flip();
+                    FlipEvaluated?.Invoke(false);
                     Debug.Log("Wrong flip::"+latestBatch.Item1.FrontSprite.name +"::"+ latestBatch.Item2.FrontSprite.name);
                 }
                 latestBatch.Item1.FlipAnimationCompleted -= Evaluate;
