@@ -1364,7 +1364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36474775a0670f64e9d5c588bb879586, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _matchMakerData: {fileID: 11400000, guid: a6e71dd8780cd514fb9d65ba3043c78c, type: 2}
+  _matchMakerData: {fileID: 11400000, guid: 95114c95ecf01384fba1d72b926220d4, type: 2}
   _panel: {fileID: 1837119723}
   _card: {fileID: 4728877503861757944, guid: 67413a116598a3046b0d222a6a7b4e07, type: 3}
   _startOffset: {x: 0, y: 0}

@@ -60,15 +60,15 @@ namespace Assets._MatchMaker.Scripts.Editor
             if (_show)
             {
                 GUILayout.Space(10);
-                for (int x = 0; x < _gridSize.x; x++)
+                for (int y = 0; y < _gridSize.y; y++)
                 {
                     EditorGUILayout.BeginHorizontal();
                     GUILayout.FlexibleSpace();
-                    for (int y = 0; y < _gridSize.y; y++)
+                    for (int x = 0; x < _gridSize.x; x++)
                     {
 
                         //Debug.Log(x * (int)_gridSize.y + y);
-                        sprites[x * (int)_gridSize.y + y] = EditorGUILayout.ObjectField(sprites[x * (int)_gridSize.y + y], typeof(Sprite), false, GUILayout.Width(scaledTileSize.x), GUILayout.Height(scaledTileSize.y)) as Sprite;
+                        sprites[y * (int)_gridSize.x + x] = EditorGUILayout.ObjectField(sprites[y * (int)_gridSize.x + x], typeof(Sprite), false, GUILayout.Width(scaledTileSize.x), GUILayout.Height(scaledTileSize.y)) as Sprite;
                     }
                     GUILayout.FlexibleSpace();
                     EditorGUILayout.EndHorizontal();

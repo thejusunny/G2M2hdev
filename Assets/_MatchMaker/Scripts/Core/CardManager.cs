@@ -11,6 +11,8 @@ public class CardManager : MonoBehaviour
     private Queue<(Card, Card)> _stagedCards = new Queue<(Card, Card)> ();
     private List<Card> _tempCards = new List<Card> ();
     public event Action<bool> FlipEvaluated;
+    public event Action AllCardsFlipped;
+    private int _flipCount;
     private void Start()
     {
         layoutBuilder.BuildCompleted += Initialize;
@@ -47,8 +49,13 @@ public class CardManager : MonoBehaviour
             {
                 if (latestBatch.Item1.FrontSprite == latestBatch.Item2.FrontSprite)
                 {
-
+                    _flipCount +=2;
                     FlipEvaluated?.Invoke(true);
+                    if (_flipCount >= _cards.Count)
+                    {
+                        Debug.Log("All Cards Flipped");
+                        AllCardsFlipped?.Invoke();
+                    }
                     Debug.Log("GoodFlip" + latestBatch.Item1.FrontSprite.name + "::" + latestBatch.Item2.FrontSprite.name);
                 }
                 else
