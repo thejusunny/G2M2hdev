@@ -29,6 +29,11 @@ public class Card : MonoBehaviour
         _image = GetComponent<Image>();
         _button = GetComponent<Button>();
     }
+    private void OnDestroy()
+    {
+        Clicked.RemoveAllListeners();
+        FlipAnimationCompleted = null;
+    }
     public void Init(Sprite frontSprite, Vector2 size, Vector2 position)
     {
         _frontSprite = frontSprite;
@@ -59,7 +64,8 @@ public class Card : MonoBehaviour
         {
             while (rotationY > 0f)
             {
-                rotationY = Mathf.Lerp(rotationY, 0, _flipOutAnimationCurve.Evaluate( (Time.time - startTime) / _flipDuration));
+                //rotationY = Mathf.Lerp(rotationY, 0, _flipOutAnimationCurve.Evaluate( (Time.time - startTime) / _flipDuration));
+                rotationY = Mathf.Lerp(rotationY, 0,  (Time.time - startTime) / _flipDuration);
                 currentRotation.y = rotationY;
                 transform.eulerAngles = currentRotation;
                 if (rotationY < 90f && _image.sprite != _backSprite)
@@ -69,12 +75,14 @@ public class Card : MonoBehaviour
                 yield return null;
             }
             _flipped = false;
+            _button.enabled = true;
         }
         else
         {
             while (rotationY < 180f)
             {
-                rotationY = Mathf.Lerp(rotationY, 180,_flipInAnimationCurve.Evaluate((Time.time - startTime) / _flipDuration));
+                //rotationY = Mathf.Lerp(rotationY, 180,_flipInAnimationCurve.Evaluate((Time.time - startTime) / _flipDuration));
+                rotationY = Mathf.Lerp(rotationY, 180,(Time.time - startTime) / _flipDuration);
                 currentRotation.y = rotationY;
                 transform.eulerAngles = currentRotation;
                 if (rotationY > 90f && _image.sprite != _frontSprite)
@@ -84,6 +92,7 @@ public class Card : MonoBehaviour
                 yield return null;
             }
             _flipped = true;
+            _button.enabled = false;
         }
         FlipAnimationCompleted?.Invoke();
         

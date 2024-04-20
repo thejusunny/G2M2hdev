@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class CardManager : MonoBehaviour
@@ -9,6 +10,7 @@ public class CardManager : MonoBehaviour
     [SerializeField] AudioClip _correctClip;
     [SerializeField] AudioClip _wrongClip;
     [SerializeField] AudioClip _completionClip;
+    [SerializeField] private float _revealDuration = 1.5f;
     private List<Card> _cards ;
     //private List<Card> _stagedCards = new List<Card>();
     private Queue<(Card, Card)> _stagedCards = new Queue<(Card, Card)> ();
@@ -19,11 +21,15 @@ public class CardManager : MonoBehaviour
     private void Awake()
     {
         _layoutBuilder.BuildCompleted += Initialize;
-        LevelManager.LoadedNewLevel += Reset;
+        LevelManager.LoadedLevel += Reset;
+        LevelManager.StartLevel += QuickReveal;
+        LevelManager.LoadedLevel += QuickReveal;
     }
     private void OnDestroy()
     {
-        LevelManager.LoadedNewLevel -= Reset;
+        LevelManager.LoadedLevel -= Reset;
+        LevelManager.StartLevel -= QuickReveal;
+        LevelManager.LoadedLevel -= QuickReveal;
     }
     private void Reset()
     {
@@ -44,18 +50,45 @@ public class CardManager : MonoBehaviour
             });
         }
     }
+    public void QuickReveal()
+    { 
+        StartCoroutine(ShowAndHide());
+    }
+    private IEnumerator ShowAndHide()
+    {
+        foreach (Card card in _cards)
+        {
+            card.Flip();
+        }
+        yield return new WaitForSeconds(_revealDuration);
+        foreach (Card card in _cards)
+        {
+            card.Flip();
+        }
+    }
     private void StageCard(Card card)
     {
         _tempCards.Add(card);
         if (_tempCards.Count >= 2)
         {
+            Debug.Log(_tempCards[0].FrontSprite.name +"::" + _tempCards[^1].FrontSprite.name);
             _stagedCards.Enqueue((_tempCards[0], _tempCards[^1]));
             _tempCards.Clear();
         }
         card.FlipAnimationCompleted += Evaluate;
     }
+    [ContextMenu("Print")]
+    private void DebugPrints()
+    {
+        Debug.Log(_stagedCards.Count);
+        foreach (var item in _stagedCards)
+        {
+            Debug.Log(item);
+        }
+    }
     private void Evaluate()
     {
+        Debug.Log("Eval");
         if (_stagedCards.Count>0)
         {
             var latestBatch = _stagedCards.Peek();

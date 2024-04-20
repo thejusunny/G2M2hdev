@@ -22,7 +22,7 @@ public class ScoreManager : MonoBehaviour
         _cardManager.FlipEvaluated += _streakHandler.Count;
         _cardManager.FlipEvaluated += UpdateUI;
         _cardManager.AllCardsFlipped += ComputeFinalScore;
-        LevelManager.LoadedNewLevel += Reset;
+        LevelManager.LoadedLevel += Reset;
         Reset();
     }
     private void ComputeFinalScore()
@@ -49,7 +49,6 @@ public class ScoreManager : MonoBehaviour
     {
         _scoreHandler.Reset(); 
         _streakHandler.Reset();
-        _ui.Show();
         _ui.Refresh(_scoreHandler.Score, _streakHandler.Streak);
     }
 }

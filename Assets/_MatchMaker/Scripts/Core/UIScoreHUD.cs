@@ -3,17 +3,20 @@ using UnityEngine;
 
 public class UIScoreHUD : MonoBehaviour
 {
+    [SerializeField] private GameObject _root;
     [SerializeField] private TMP_Text _correctText;
     [SerializeField] private TMP_Text _turnsText;
     [SerializeField] private TMP_Text _streakText;
     [SerializeField] private TMP_Text _bestStreakText;
     private void Start()
     {
-        LevelManager.LoadedNewLevel += Show;
+        LevelManager.LoadedLevel += Show;
+        LevelManager.StartLevel += Show;
     }
     private void OnDestroy()
     {
-        LevelManager.LoadedNewLevel -= Show;
+        LevelManager.LoadedLevel -= Show;
+        LevelManager.StartLevel -= Show;
     }
     public void Refresh(Score score, Streak streak)
     { 
@@ -23,11 +26,11 @@ public class UIScoreHUD : MonoBehaviour
         _bestStreakText.text = streak.bestStreak.ToString();   
     }
     public void Hide()
-    { 
-        gameObject.SetActive(false);
+    {
+        _root.SetActive(false);
     }
     public void Show()
-    { 
-        gameObject.SetActive(true);
+    {
+        _root.SetActive(true);
     }
 }

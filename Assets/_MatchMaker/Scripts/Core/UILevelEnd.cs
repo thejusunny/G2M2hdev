@@ -10,10 +10,10 @@ public class UILevelEnd : MonoBehaviour
     [SerializeField]private TMP_Text _wrongText;
     [SerializeField]private TMP_Text _pointsText;
     [SerializeField]private TMP_Text _bestStreakText;
-    public void Show(Score score, Streak streak)
+    public void Show(Score score, Streak streak, string levelName)
     {
         _root.SetActive(true);
-        _levelName.text = "GAME";
+        _levelName.text = levelName.ToUpper();
         _correctText.text = score.correct.ToString();
         _totalTurnsText.text = score.turns.ToString();
         _wrongText.text = score.wrong.ToString();

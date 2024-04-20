@@ -2,6 +2,7 @@ using Assets._MatchMaker.Scripts.Data;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ public class MatchMakerLayoutBuilder : MonoBehaviour
     [SerializeField]private MatchMakerData _matchMakerData;
     [SerializeField]private RectTransform _panel;
     [SerializeField]private Card _card;
+    [SerializeField] TMP_Text _levelNameText;
     [SerializeField]private Vector2 _startOffset;
     [SerializeField]private Vector2 _extraPadding;
     List<Vector2> _placementPositions = new List<Vector2>();
@@ -26,6 +28,7 @@ public class MatchMakerLayoutBuilder : MonoBehaviour
     {
         _placementPositions.Clear();
         ClearLayout();
+        _levelNameText.text = _data.name.ToUpper();
         _gridSize = _data._dimensions;
         float width = _panel.sizeDelta.x *0.8f; //20% for padding
         float height = _panel.sizeDelta.y * 0.8f;
